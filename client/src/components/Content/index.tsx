@@ -4,17 +4,16 @@ import { fetchGallery } from "../../api";
 import { useQuery } from "@tanstack/react-query";
 import { useGallery } from "../../context/GalleryContext";
 import Form from "../Form";
+import { ContextStateType } from "../../@types/gallery";
 
 export default function ContentSlider() {
   const { isLoading, isError, data } = useQuery(["gallery"], () =>
     fetchGallery()
   );
 
-
-
   const [index, setIndex] = useState(0);
   const [bool, setBool] = useState(true);
-  const gallery = useGallery();
+  const { gallery } = useGallery() as ContextStateType;
 
   useEffect(() => {
     let interval = setInterval(() => {
