@@ -7,5 +7,5 @@ export interface ContextState {
 
 export type ContextStateType = {
     gallery: ContextState[];
-    saveGallery: (item: ContextState[]) => void;
+    updateGallery: (item: ContextState[]) => void;
 };

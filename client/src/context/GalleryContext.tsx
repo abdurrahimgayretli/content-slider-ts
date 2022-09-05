@@ -19,11 +19,11 @@ export const GalleryContextProvider = ({ children }: any) => {
     },
   ]);
 
-  const saveGallery = (item: ContextState[]) => {
+  const updateGallery = (item: ContextState[]) => {
     setGallery(item);
   };
 
-  const values = { gallery, saveGallery };
+  const values = { gallery, updateGallery };
 
   return (
     <GalleryContext.Provider value={values}>{children}</GalleryContext.Provider>

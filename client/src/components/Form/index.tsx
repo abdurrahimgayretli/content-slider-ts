@@ -14,16 +14,15 @@ import { useFormik } from "formik";
 import { useGallery } from "../../context/GalleryContext";
 import { postGallery } from "../../api";
 import validationSchema from "./validations";
-import Playlist from "../PlayList";
 import { ContextStateType } from "../../@types/gallery";
+import FormNavbar from "../Navbar";
 
 export default function Form() {
   const { gallery } = useGallery() as ContextStateType;
 
   const [visible, setVisible] = useState(true);
-  const [playlist, setPlaylist] = useState(false);
 
-  useEffect(() => {}, [visible, playlist]);
+  useEffect(() => {}, [visible]);
 
   const formik = useFormik({
     initialValues: {
@@ -33,7 +32,7 @@ export default function Form() {
       duration: 0,
     },
     validationSchema,
-    onSubmit: async (values, bag: any) => {
+    onSubmit: async (values: any, bag: any) => {
       try {
         gallery.push({
           name: values.name,
@@ -56,7 +55,7 @@ export default function Form() {
 
   return (
     <>
-      {visible && !playlist && (
+      {visible && (
         <div className="form">
           <Flex
             align="center"
@@ -66,6 +65,7 @@ export default function Form() {
           >
             <Box p={6} rounded="md">
               <Box textAlign="center">
+                <FormNavbar />
                 <Heading>
                   Add Content <b />
                   <Button
@@ -161,22 +161,8 @@ export default function Form() {
                   </Button>
                 </form>
               </Box>
-              <Button
-                onClick={() => {
-                  setPlaylist(true);
-                }}
-                colorScheme={"yellow"}
-                width="full"
-              >
-                Playlist
-              </Button>
             </Box>
           </Flex>
-        </div>
-      )}
-      {visible && playlist && (
-        <div className="list">
-          <Playlist />
         </div>
       )}
       {!visible && (
