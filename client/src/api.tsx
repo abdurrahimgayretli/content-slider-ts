@@ -14,3 +14,11 @@ export const postGallery = async (input: any) => {
   );
   return data;
 };
+
+export const deleteGallery = async (gallery_id: any) => {
+  const { data } = await axios.delete(
+    `${process.env.REACT_APP_BASE_ENDPOINT}/gallery/${gallery_id}`
+  );
+
+  return data;
+};

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Box,
@@ -14,9 +14,15 @@ import { useFormik } from "formik";
 import { useGallery } from "../../context/GalleryContext";
 import { postGallery } from "../../api";
 import validationSchema from "./validations";
+import { ContextStateType } from "../../@types/gallery";
+import FormNavbar from "../Navbar";
 
 export default function Form() {
-  const gallery = useGallery();
+  const { gallery } = useGallery() as ContextStateType;
+
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {}, [visible]);
 
   const formik = useFormik({
     initialValues: {
@@ -26,7 +32,7 @@ export default function Form() {
       duration: 0,
     },
     validationSchema,
-    onSubmit: async (values, bag: any) => {
+    onSubmit: async (values: any, bag: any) => {
       try {
         gallery.push({
           name: values.name,
@@ -46,88 +52,131 @@ export default function Form() {
       bag.resetForm();
     },
   });
+
   return (
-    <div className="form">
-      <Flex
-        align="center"
-        justify="right"
-        width={"full"}
-        justifyContent="center"
-      >
-        <Box p={6} rounded="md">
-          <Box textAlign="center">
-            <Heading>Add Content</Heading>
-          </Box>
-          <Box my={5} textAlign="left">
-            <form onSubmit={formik.handleSubmit}>
-              <FormControl>
-                <FormLabel htmlFor="name">Name:</FormLabel>
-                <Input
-                  id="name"
-                  name="name"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.name}
-                  isInvalid={formik.touched.name && Boolean(formik.errors.name)}
-                />
-                {formik.errors.name && formik.touched.name && (
-                  <Alert status="error">{formik.errors.name}</Alert>
-                )}
-              </FormControl>
-              <FormControl mt={4}>
-                <FormLabel htmlFor="type">Type</FormLabel>
-                <Select
-                  id="type"
-                  name="type"
-                  placeholder="Select type"
-                  value={formik.values.type}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  isInvalid={formik.touched.type && Boolean(formik.errors.type)}
-                >
-                  <option value={"img"}>Image</option>
-                  <option value={"mp4"}>Video</option>
-                </Select>
-                {formik.errors.type && formik.touched.type && (
-                  <Alert status="error">{formik.errors.type}</Alert>
-                )}
-              </FormControl>
-              <FormControl mt={4}>
-                <FormLabel htmlFor="url">URL</FormLabel>
-                <Input
-                  id="url"
-                  name="url"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.url}
-                  isInvalid={formik.touched.url && Boolean(formik.errors.url)}
-                />
-                {formik.errors.url && formik.touched.url && (
-                  <Alert status="error">{formik.errors.url}</Alert>
-                )}
-              </FormControl>
-              <FormControl mt={4}>
-                <FormLabel htmlFor="duration">Duration:</FormLabel>
-                <Input
-                  id="duration"
-                  name="duration"
-                  type="number"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.duration}
-                  isInvalid={formik.touched.duration && Boolean(formik.errors.duration)}
-                />
-                {formik.errors.duration && formik.touched.duration && (
-                  <Alert status="error">{formik.errors.duration}</Alert>
-                )}
-              </FormControl>
-              <Button mt={5} type="submit" colorScheme={"purple"} width="full">
-                Submit
-              </Button>
-            </form>
-          </Box>
-        </Box>
-      </Flex>
-    </div>
+    <>
+      {visible && (
+        <div className="form">
+          <Flex
+            align="center"
+            justify="right"
+            width={"full"}
+            justifyContent="center"
+          >
+            <Box p={6} rounded="md">
+              <Box textAlign="center">
+                <FormNavbar />
+                <Heading>
+                  Add Content <b />
+                  <Button
+                    onClick={() => {
+                      setVisible(false);
+                    }}
+                    type="button"
+                    colorScheme={"red"}
+                  >
+                    X
+                  </Button>
+                </Heading>
+              </Box>
+              <Box my={5} textAlign="left">
+                <form onSubmit={formik.handleSubmit}>
+                  <FormControl>
+                    <FormLabel htmlFor="name">Name:</FormLabel>
+                    <Input
+                      id="name"
+                      name="name"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.name}
+                      isInvalid={
+                        formik.touched.name && Boolean(formik.errors.name)
+                      }
+                    />
+                    {formik.errors.name && formik.touched.name && (
+                      <Alert status="error">{formik.errors.name}</Alert>
+                    )}
+                  </FormControl>
+                  <FormControl mt={4}>
+                    <FormLabel htmlFor="type">Type</FormLabel>
+                    <Select
+                      id="type"
+                      name="type"
+                      placeholder="Select type"
+                      value={formik.values.type}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      isInvalid={
+                        formik.touched.type && Boolean(formik.errors.type)
+                      }
+                    >
+                      <option value={"img"}>Image</option>
+                      <option value={"mp4"}>Video</option>
+                    </Select>
+                    {formik.errors.type && formik.touched.type && (
+                      <Alert status="error">{formik.errors.type}</Alert>
+                    )}
+                  </FormControl>
+                  <FormControl mt={4}>
+                    <FormLabel htmlFor="url">URL</FormLabel>
+                    <Input
+                      id="url"
+                      name="url"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.url}
+                      isInvalid={
+                        formik.touched.url && Boolean(formik.errors.url)
+                      }
+                    />
+                    {formik.errors.url && formik.touched.url && (
+                      <Alert status="error">{formik.errors.url}</Alert>
+                    )}
+                  </FormControl>
+                  <FormControl mt={4}>
+                    <FormLabel htmlFor="duration">Duration:</FormLabel>
+                    <Input
+                      id="duration"
+                      name="duration"
+                      type="number"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.duration}
+                      isInvalid={
+                        formik.touched.duration &&
+                        Boolean(formik.errors.duration)
+                      }
+                    />
+                    {formik.errors.duration && formik.touched.duration && (
+                      <Alert status="error">{formik.errors.duration}</Alert>
+                    )}
+                  </FormControl>
+                  <Button
+                    mt={5}
+                    type="submit"
+                    colorScheme={"purple"}
+                    width="full"
+                  >
+                    Submit
+                  </Button>
+                </form>
+              </Box>
+            </Box>
+          </Flex>
+        </div>
+      )}
+      {!visible && (
+        <div className="form">
+          <Button
+            onClick={() => {
+              setVisible(true);
+            }}
+            colorScheme={"red"}
+          >
+            X
+          </Button>
+        </div>
+      )}
+    </>
   );
 }
